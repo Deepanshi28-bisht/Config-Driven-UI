@@ -1,0 +1,25 @@
+{
+  "cards": [
+    {
+      "id": 1,
+      "image": "/images/img1.webp",
+      "imageAlt": "React development",
+      "title": "React Development",
+      "description": "Learn to build reusable UI components using React."
+    },
+    {
+      "id": 2,
+      "image": "/images/img2.webp",
+      "imageAlt": "JavaScript programming",
+      "title": "JavaScript",
+      "description": "Explore JavaScript fundamentals, functions, arrays, and objects."
+    },
+    {
+      "id": 3,
+      "image": "/images/img3.webp",
+      "imageAlt": "Website animation",
+      "title": "GSAP Animations",
+      "description": "Discover how to create engaging website animations with GSAP."
+    }
+  ]
+}

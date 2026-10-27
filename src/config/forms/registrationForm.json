@@ -1,0 +1,107 @@
+{
+  "type": "form",
+  "version": "1.0",
+  "config": {
+    "title": "User Registration",
+    "description": "Create your account.",
+    "layout": "vertical",
+    "fields": [
+      {
+        "name": "fullName",
+        "type": "text",
+        "label": "Full Name",
+        "placeholder": "Enter your full name",
+        "required": true,
+        "validations": {
+          "minLength": 3,
+          "messages": {
+            "required": "Full name is required.",
+            "minLength": "Name must contain at least 3 characters."
+          }
+        }
+      },
+      {
+        "name": "email",
+        "type": "email",
+        "label": "Email Address",
+        "placeholder": "Enter your email",
+        "required": true,
+        "validations": {
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "messages": {
+            "required": "Email is required.",
+            "pattern": "Please enter a valid email address."
+          }
+        }
+      },
+      {
+        "name": "password",
+        "type": "password",
+        "label": "Password",
+        "placeholder": "Enter your password",
+        "required": true,
+        "validations": {
+          "minLength": 8,
+          "messages": {
+            "required": "Password is required.",
+            "minLength": "Password must contain at least 8 characters."
+          }
+        }
+      },
+      {
+        "name": "message",
+        "type": "textarea",
+        "label": "Message",
+        "placeholder": "Enter your message",
+        "required": true
+      },
+      {
+        "name": "country",
+        "type": "select",
+        "label": "Country",
+        "required": true,
+        "validations": {
+          "messages": {
+            "required": "Please select a country."
+          }
+        },
+        "options": [
+          {
+            "label": "India",
+            "value": "india"
+          },
+          {
+            "label": "United States",
+            "value": "usa"
+          },
+          {
+            "label": "United Kingdom",
+            "value": "uk"
+          }
+        ]
+      },
+      {
+        "name": "acceptTerms",
+        "type": "checkbox",
+        "label": "I accept the terms and conditions",
+        "required": true,
+        "validations": {
+          "messages": {
+            "required": "You must accept the terms and conditions."
+          }
+        },
+        "value": "accepted"
+      }
+    ],
+    "actions": [
+      {
+        "type": "submit",
+        "label": "Register"
+      },
+      {
+        "type": "reset",
+        "label": "Reset"
+      }
+    ]
+  }
+}
