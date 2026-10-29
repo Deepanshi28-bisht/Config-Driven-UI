@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Container from "../../container/Container";
 import Heading2 from "../typography/Heading2";
 import Paragraph from "../typography/Paragraph";
@@ -7,49 +7,67 @@ import FormField from "./FormField";
 import { validateField, validateForm } from "../../utils/validation";
 
 const Form = ({ config, onSubmit }) => {
-  const [errors, setErrors] = useState({});
-  console.log("errors", errors);
-  console.log(config);
   const formConfig = config?.config;
+
   if (!formConfig || !Array.isArray(formConfig.fields)) {
-    return <p>Invalid form configuration.</p>;
+    return <p className="p-4 text-red-600">Invalid form configuration.</p>;
   }
-  function handleSubmit(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const values = Object.fromEntries(formData.entries());
+
+  const getInitialValues = () => {
+    const values = {};
     formConfig.fields.forEach((field) => {
-      if (field.type === "checkbox") {
-        const checkbox = event.currentTarget.elements.namedItem(field.name);
-        values[field.name] = checkbox.checked;
-      }
-    });
-    const newErrors = validateForm(formConfig.fields, values);
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) {
-      return;
+     if (field.type === "checkbox") {
+      values[field.name] = field.defaultValue === true || field.value === true;
+    } else {
+      values[field.name] = field.defaultValue ?? field.value ?? "";
     }
-    onSubmit?.(values);
-    form.reset();
+    });
+    return values;
+  };
+
+  const [values, setValues] = useState(getInitialValues);
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setValues(getInitialValues());
     setErrors({});
-  }
+  }, [config]);
 
   function handleFieldChange(event) {
     const { name, value, type, checked } = event.target;
-
-    const field = formConfig.fields.find((item) => item.name === name);
-
-    if (!field) return;
-
     const fieldValue = type === "checkbox" ? checked : value;
 
-    const error = validateField(field, fieldValue);
-
-    setErrors((previousErrors) => ({
-      ...previousErrors,
-      [name]: error,
+    setValues((prev) => ({
+      ...prev,
+      [name]: fieldValue,
     }));
+
+    const field = formConfig.fields.find((item) => item.name === name);
+    if (field) {
+      const error = validateField(field, fieldValue);
+      setErrors((prev) => ({
+        ...prev,
+        [name]: error,
+      }));
+    }
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const newErrors = validateForm(formConfig.fields, values);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    onSubmit?.(values);
+    setValues(getInitialValues());
+    setErrors({});
+  }
+
+  function handleReset() {
+    setValues(getInitialValues());
+    setErrors({});
   }
 
   return (
@@ -57,26 +75,34 @@ const Form = ({ config, onSubmit }) => {
       <Container>
         <form
           onSubmit={handleSubmit}
-          onReset={() => setErrors({})}
+          onReset={handleReset}
           noValidate
-          className="py-5 px-4 w-full max-w-[600px] mx-auto flex flex-col justify-items-center gap-5 shadow rounded-xl"
+          className="py-5 px-4 w-full max-w-[600px] mx-auto flex flex-col gap-5 shadow rounded-xl"
         >
-          <Heading2 classname="text-center">{formConfig.title}</Heading2>
-          <Paragraph classname="text-center">
-            {formConfig.description}
-          </Paragraph>
-          {formConfig.fields.map((field) => {
-            return (
-              <div key={field.name} className="flex flex-col w-full gap-2">
-                <label htmlFor={field.name}>{field.label}</label>
-                <FormField
-                  field={field}
-                  error={errors[field.name]}
-                  onChange={handleFieldChange}
-                />
-              </div>
-            );
-          })}
+          {formConfig.title && (
+            <Heading2 classname="text-center">{formConfig.title}</Heading2>
+          )}
+          {formConfig.description && (
+            <Paragraph classname="text-center">{formConfig.description}</Paragraph>
+          )}
+
+          {formConfig.fields.map((field) => (
+            <div key={field.name} className="flex flex-col w-full gap-1">
+              {field.type !== "checkbox" && (
+                <label htmlFor={field.name} className="font-medium">
+                  {field.label}
+                  {field.required && <span className="text-red-500"> *</span>}
+                </label>
+              )}
+
+              <FormField
+                field={field}
+                error={errors[field.name]}
+                onChange={handleFieldChange}
+                value={values[field.name]}
+              />
+            </div>
+          ))}
 
           <FormActions actions={formConfig.actions} />
         </form>

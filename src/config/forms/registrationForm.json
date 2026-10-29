@@ -85,12 +85,37 @@
         "type": "checkbox",
         "label": "I accept the terms and conditions",
         "required": true,
+        "defaultValue": true,
         "validations": {
           "messages": {
             "required": "You must accept the terms and conditions."
           }
-        },
-        "value": "accepted"
+        }
+      },
+      {
+        "name": "gender",
+        "type": "radio",
+        "label": "Gender",
+        "required": true,
+        "options": [
+          {
+            "label": "Male",
+            "value": "male"
+          },
+          {
+            "label": "Female",
+            "value": "female"
+          },
+          {
+            "label": "Other",
+            "value": "other"
+          }
+        ],
+        "validations": {
+          "messages": {
+            "required": "Please select your gender."
+          }
+        }
       }
     ],
     "actions": [

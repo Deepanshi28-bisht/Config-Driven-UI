@@ -2,24 +2,67 @@
   "cards": [
     {
       "id": 1,
+      "headingParaLayout": "vertical",
       "image": "/images/img1.webp",
       "imageAlt": "React development",
       "title": "React Development",
-      "description": "Learn to build reusable UI components using React."
+      "description": "Learn to build reusable UI components using React.",
+      "badges": ["Popular", "Beginner"],
+      "metadata": [
+        {
+          "label": "Category",
+          "value": "Frontend"
+        },
+        {
+          "label": "Technology",
+          "value": "React"
+        }
+      ],
+      "actions": [
+        {
+          "type": "link",
+          "label": "View Course",
+          "url": "https://youtu.be/f0zxJz5oR6U"
+        }
+      ]
     },
     {
       "id": 2,
+      "headingParaLayout": "vertical",
       "image": "/images/img2.webp",
       "imageAlt": "JavaScript programming",
       "title": "JavaScript",
-      "description": "Explore JavaScript fundamentals, functions, arrays, and objects."
+      "description": "Explore JavaScript fundamentals, functions, arrays, and objects.",
+      "badges": ["Essential"],
+      "metadata": [
+        {
+          "label": "Category",
+          "value": "Programming"
+        },
+        {
+          "label": "Level",
+          "value": "Beginner"
+        }
+      ]
     },
     {
       "id": 3,
+      "headingParaLayout": "horizontal",
       "image": "/images/img3.webp",
       "imageAlt": "Website animation",
-      "title": "GSAP Animations",
-      "description": "Discover how to create engaging website animations with GSAP."
+      "title": "HTML",
+      "description": "HTML is the standard markup language for Web pages. With HTML you can create your own Website.",
+      "badges": ["Fundamentals", "Web Development"],
+      "metadata": [
+        {
+          "label": "Category",
+          "value": "Frontend"
+        },
+        {
+          "label": "Purpose",
+          "value": "Web Structure"
+        }
+      ]
     }
   ]
 }
