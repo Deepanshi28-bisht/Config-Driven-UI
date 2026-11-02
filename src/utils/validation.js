@@ -1,5 +1,4 @@
 export function validateField(field, value) {
-  console.log("field", field);
   const validations = field.validations ?? {};
   const messages = validations.messages ?? {};
   if (field.type === "checkbox") {

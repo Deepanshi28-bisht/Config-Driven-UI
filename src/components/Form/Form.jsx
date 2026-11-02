@@ -5,34 +5,33 @@ import Paragraph from "../typography/Paragraph";
 import FormActions from "./FormActions";
 import FormField from "./FormField";
 import { validateField, validateForm } from "../../utils/validation";
-
-const Form = ({ config, onSubmit }) => {
-  const formConfig = config?.config;
-
-  if (!formConfig || !Array.isArray(formConfig.fields)) {
-    return <p className="p-4 text-red-600">Invalid form configuration.</p>;
-  }
-
-  const getInitialValues = () => {
-    const values = {};
-    formConfig.fields.forEach((field) => {
-     if (field.type === "checkbox") {
+const getInitialValues = (fields) => {
+  const values = {};
+  fields.forEach((field) => {
+    if (field.type === "checkbox") {
       values[field.name] = field.defaultValue === true || field.value === true;
     } else {
       values[field.name] = field.defaultValue ?? field.value ?? "";
     }
-    });
-    return values;
-  };
-
-  const [values, setValues] = useState(getInitialValues);
+  });
+  return values;
+};
+const Form = ({ config, onSubmit }) => {
+  const formConfig = config?.config;
+  if (!formConfig || !Array.isArray(formConfig.fields)) {
+    return <p className="p-4 text-red-600">Invalid form configuration.</p>;
+  }
+  return <FormContent formConfig={formConfig} onSubmit={onSubmit} />;
+};
+const FormContent = ({ formConfig, onSubmit }) => {
+  const [values, setValues] = useState(() =>
+    getInitialValues(formConfig.fields),
+  );
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    setValues(getInitialValues());
+  function handleReset() {
+    setValues(getInitialValues(formConfig.fields));
     setErrors({});
-  }, [config]);
-
+  }
   function handleFieldChange(event) {
     const { name, value, type, checked } = event.target;
     const fieldValue = type === "checkbox" ? checked : value;
@@ -51,7 +50,6 @@ const Form = ({ config, onSubmit }) => {
       }));
     }
   }
-
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -61,15 +59,8 @@ const Form = ({ config, onSubmit }) => {
     if (Object.keys(newErrors).length > 0) return;
 
     onSubmit?.(values);
-    setValues(getInitialValues());
     setErrors({});
   }
-
-  function handleReset() {
-    setValues(getInitialValues());
-    setErrors({});
-  }
-
   return (
     <main className="py-20 h-full w-full">
       <Container>
@@ -83,7 +74,9 @@ const Form = ({ config, onSubmit }) => {
             <Heading2 classname="text-center">{formConfig.title}</Heading2>
           )}
           {formConfig.description && (
-            <Paragraph classname="text-center">{formConfig.description}</Paragraph>
+            <Paragraph classname="text-center">
+              {formConfig.description}
+            </Paragraph>
           )}
 
           {formConfig.fields.map((field) => (
